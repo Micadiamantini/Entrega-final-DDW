@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calculadora</title>
+  <link rel="stylesheet" href="../styles.css">
+  <style>
+    .calculator {
+      max-width: 300px;
+      margin: 5rem auto;
+      background: var(--card-bg);
+      padding: 2rem;
+      border-radius: 12px;
+      text-align: center;
+    }
+    .calculator input, .calculator button {
+      margin: 0.5rem 0;
+      padding: 0.75rem;
+      width: 100%;
+      font-size: 1.2rem;
+      border-radius: 8px;
+      border: none;
+    }
+    .calculator button {
+      background: var(--accent);
+      color: var(--bg);
+      cursor: pointer;
+    }
+    .calculator button:hover {
+      background: #00ccff;
+    }
+    h2 {
+      color: aliceblue;
+    }
+    h3 {
+      color: aliceblue;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <nav class="navbar">
+      <h1 class="logo">Mica Diamantini</h1>
+      <ul class="nav-links">
+        <li><a href="../index.html">Inicio</a></li>
+        <li><a href="../index.html">Volver a Proyectos</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <div class="calculator">
+    <h2>Calculadora</h2>
+    <input type="number" id="num1" placeholder="Número 1">
+    <input type="number" id="num2" placeholder="Número 2">
+    <select id="operacion">
+      <option value="+">Suma</option>
+      <option value="-">Resta</option>
+      <option value="*">Multiplicación</option>
+      <option value="/">División</option>
+      <option value="%">Porcentaje</option>
+    </select>
+    <button onclick="calcular()">Calcular</button>
+    <h3 id="resultado"></h3>
+  </div>
+
+  <script>
+    function calcular() {
+      const num1 = parseFloat(document.getElementById('num1').value);
+      const num2 = parseFloat(document.getElementById('num2').value);
+      const operacion = document.getElementById('operacion').value;
+      let resultado;
+      if (isNaN(num1) || isNaN(num2)) {
+        resultado = 'Por favor, ingresa ambos números';
+      } else {
+        switch (operacion) {
+          case '+': resultado = num1 + num2; break;
+          case '-': resultado = num1 - num2; break;
+          case '*': resultado = num1 * num2; break;
+          case '/': resultado = num2 !== 0 ? num1 / num2 : 'Error: división por cero'; break;
+          case '%': resultado = (num1 * num2) / 100; break;
+        }
+      }
+      document.getElementById('resultado').textContent = `Resultado: ${resultado}`;
+    }
+  </script>
+</body>
+</html>

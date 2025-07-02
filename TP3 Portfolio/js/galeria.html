@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Galería de paisajes</title>
+    <link rel="stylesheet" href="../styles.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Estilos para la galería */
+        .galeria {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-top: 1rem;
+            margin-left: 1rem;
+            margin-right: 1rem;
+        }
+
+        .galeria div {
+            background-color: #ccc;
+            height: 30vh;
+            border-radius: 1rem;
+            transition: transform 0.3s ease, background-color 0.5s ease;
+        }
+
+        .galeria div:hover {
+            transform: scale(1.02);
+        }
+
+        .galeria img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            display: block;
+        }
+
+        .galeria div:hover {
+            background-color: #aaa;
+            cursor: pointer;
+        }
+
+        /* Estilos para el lightbox */
+        .lightbox {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.8);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .lightbox.active {
+            display: flex;
+        }
+
+        .lightbox-img {
+            max-width: 90vw;
+            max-height: 80vh;
+        }
+
+        /* Estilos para los botones */
+        .lightbox-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 1100;
+            padding: 1rem 1.5rem;
+            cursor: pointer;
+        }
+
+        .lightbox-btn.prev {
+            left: 2vw;
+        }
+
+        .lightbox-btn.next {
+            right: 2vw;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <nav class="navbar">
+            <h1 class="logo">Micaela Diamantini</h1>
+            <ul class="nav-links">
+                <li><a href="../index.html">Volver</a></li>
+            </ul>
+        </nav>
+    </header>
+    <!-- Galería -->
+     <section class="galeria"></section>
+    <!-- Lightbox -->
+    <div class="lightbox">
+        <button class="lightbox-btn prev">Anterior</button>
+        <img src="" alt="Imagen ampliada" class="lightbox-img">
+        <button class="lightbox-btn next">Siguiente</button>
+    </div>
+
+    <script>
+        // Cargar imagenes en la galería
+        const totalImagenes = 9;
+        const galeria = document.querySelector('.galeria');
+
+        for (let i = 1; i <= totalImagenes; i++) {
+            const div = document.createElement('div');
+            const img = document.createElement('img');
+            img.src = `./img/img${i}.JPG`; // Cambiar por la ruta de las imágenes
+            img.alt = `img ${i}`;
+            div.appendChild(img);
+            galeria.appendChild(div);
+        }
+
+        // Lógica del lightbox
+        const lightbox = document.querySelector('.lightbox');
+        const lightboxImg = document.querySelector('.lightbox-img');
+
+        galeria.addEventListener('click', function (e) {
+            if (e.target.tagName === 'IMG') {
+                lightboxImg.src = e.target.src;
+                lightbox.classList.add('active');
+            }
+        });
+
+        // Cerrar lightbox al hacer clic en cualquier parte
+        lightbox.addEventListener('click', function () {
+            lightbox.classList.remove('active');
+            lightboxImg.src = '';
+        });
+
+        // Obtener todas las imágenes de la galería
+        const imagenes = Array.from(document.querySelectorAll('.galeria img'));
+
+        // Mostrar imagen en lightbox por índice
+        function mostrarImagen(idx) {
+            currentIndex = (idx + imagenes.length) % imagenes.length;
+            lightboxImg.src = imagenes[currentIndex].src;
+        }
+
+        // Abrir lightbox y guardar índice actual
+        galeria.addEventListener('click', function (e) {
+            if (e.target.tagName === 'IMG') {
+                currentIndex = imagenes.indexOf(e.target);
+                mostrarImagen(currentIndex);
+                lightbox.classList.add('active');
+            }
+        });
+
+        // Navegación botones
+        const prevBtn = document.querySelector('.lightbox-btn.prev');
+        const nextBtn = document.querySelector('.lightbox-btn.next');
+
+        prevBtn.addEventListener('click', function (e) {
+            e.stopPropagation();
+            mostrarImagen(currentIndex - 1);
+        });
+
+        nextBtn.addEventListener('click', function (e) {
+            e.stopPropagation();
+            mostrarImagen(currentIndex + 1);
+        });
+
+        // Evitar cerrar modal al hacer clic en imagen o botones
+        prevBtn.addEventListener('click', function (e) {
+            e.stopPropagation();
+        });
+        nextBtn.addEventListener('click', function (e) {
+            e.stopPropagation();
+        });
+
+    </script>
+</body>
+
+</html>
